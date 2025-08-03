@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/userModel'); // Make sure User model is imported
+const User = require('../models/User'); 
 
 const { registerUser, loginUser, getUserProfile } = require('../controllers/authController');
 
-// Auth routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/profile/:id', getUserProfile);
