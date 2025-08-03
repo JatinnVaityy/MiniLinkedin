@@ -32,7 +32,7 @@ const Navbar = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/users/update/${user._id}`, {
+      const res = await fetch(`https://minilinkedinn.onrender.com/api/users/update/${user._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bio }),

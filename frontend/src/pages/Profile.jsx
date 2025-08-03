@@ -15,7 +15,7 @@ const Profile = () => {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get(`http://localhost:5000/api/posts/user/${id}`);
+      const response = await axios.get(`https://minilinkedinn.onrender.com/api/posts/user/${id}`);
 
       if (response.data.user) {
         setUser(response.data.user);

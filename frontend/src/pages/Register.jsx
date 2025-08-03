@@ -9,8 +9,8 @@ const Register = () => {
   const handleRegister = async () => {
     try {
       const { bio, ...rest } = form;
-      const payload = { ...rest, about: bio }; // backend expects 'about'
-      const res = await axios.post("http://localhost:5000/api/users/register", payload);
+      const payload = { ...rest, about: bio }; 
+      const res = await axios.post("https://minilinkedinn.onrender.com/api/users/register", payload);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/");
     } catch (err) {
