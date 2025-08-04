@@ -20,7 +20,6 @@ router.put('/update/:id', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Wrap updatedUser in { user: updatedUser } to match frontend expectation
     res.status(200).json({ user: updatedUser });
   } catch (err) {
     console.error(err);

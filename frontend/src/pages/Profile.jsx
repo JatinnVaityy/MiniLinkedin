@@ -15,7 +15,9 @@ const Profile = () => {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get(`https://minilinkedinn.onrender.com/api/posts/user/${id}`);
+      const response = await axios.get(
+        `https://minilinkedinn.onrender.com/api/posts/user/${id}`
+      );
 
       if (response.data.user) {
         setUser(response.data.user);
@@ -38,7 +40,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    fetchUserData();
+    fetchUserData(); // Always fetch fresh profile data
   }, [id]);
 
   if (loading) return <div className="text-center mt-6">Loading profile...</div>;
@@ -51,7 +53,9 @@ const Profile = () => {
     <div className="max-w-3xl mx-auto mt-6 px-4">
       <div className="bg-white shadow-md rounded-lg p-6 mb-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-1">{user.name}</h1>
-        <p className="text-gray-600">{user?.bio || "No bio Provided."}</p>
+        <p className="text-gray-600">
+          {user.bio?.trim() ? user.bio : "Bio not available."}
+        </p>
       </div>
 
       <h2 className="text-xl font-semibold mb-4">Posts</h2>

@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "", bio: "" });
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext); // ✅
 
   const handleRegister = async () => {
     try {
       const { bio, ...rest } = form;
-      const payload = { ...rest, about: bio }; 
+      const payload = { ...rest, about: bio };
       const res = await axios.post("https://minilinkedinn.onrender.com/api/users/register", payload);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      setUser(res.data.user); // ✅ update context
       navigate("/");
     } catch (err) {
       alert("Registration failed");
@@ -19,10 +22,10 @@ const Register = () => {
   };
 
   return (
-   <div className="h-100 flex items-center justify-center px-4 overflow-hidden">
+    <div className="h-100 flex items-center justify-center px-4 overflow-hidden">
       <div
         className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md"
-        style={{ maxHeight: "90vh", overflowY: "auto" }} 
+        style={{ maxHeight: "90vh", overflowY: "auto" }}
       >
         <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Join LinkedIn</h2>
         <input

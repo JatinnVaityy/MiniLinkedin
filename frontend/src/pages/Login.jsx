@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext); // ✅
 
   const handleLogin = async () => {
     try {
       const res = await axios.post("https://minilinkedinn.onrender.com/api/users/login", { email, password });
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      setUser(res.data.user); // ✅ update context
       navigate("/");
     } catch (err) {
       alert("Invalid credentials");
