@@ -7,18 +7,20 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext); // ✅
+  const { setUser } = useContext(AuthContext); 
+const handleLogin = async () => {
+  try {
+    const res = await axios.post("https://minilinkedinn.onrender.com/api/users/login", { email, password });
+    const { user, token } = res.data;
+    const userWithToken = { ...user, token };
+    localStorage.setItem("user", JSON.stringify(userWithToken));
+    setUser(userWithToken);
+    navigate("/");
+  } catch (err) {
+    alert("Invalid credentials");
+  }
+};
 
-  const handleLogin = async () => {
-    try {
-      const res = await axios.post("https://minilinkedinn.onrender.com/api/users/login", { email, password });
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      setUser(res.data.user); // ✅ update context
-      navigate("/");
-    } catch (err) {
-      alert("Invalid credentials");
-    }
-  };
 
   return (
     <div className="h-100  flex items-center justify-center px-4">

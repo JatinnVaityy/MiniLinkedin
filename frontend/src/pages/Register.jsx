@@ -6,20 +6,21 @@ import { AuthContext } from "../context/AuthContext";
 const Register = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "", bio: "" });
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext); // ✅
-
-  const handleRegister = async () => {
-    try {
-      const { bio, ...rest } = form;
-      const payload = { ...rest, about: bio };
-      const res = await axios.post("https://minilinkedinn.onrender.com/api/users/register", payload);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      setUser(res.data.user); // ✅ update context
-      navigate("/");
-    } catch (err) {
-      alert("Registration failed");
-    }
-  };
+  const { setUser } = useContext(AuthContext); 
+const handleRegister = async () => {
+  try {
+    const { bio, ...rest } = form;
+    const payload = { ...rest, bio };
+    const res = await axios.post("https://minilinkedinn.onrender.com/api/users/register", payload);
+    const { user, token } = res.data;
+    const userWithToken = { ...user, token };
+    localStorage.setItem("user", JSON.stringify(userWithToken));
+    setUser(userWithToken);
+    navigate("/");
+  } catch (err) {
+    alert("Registration failed");
+  }
+};
 
   return (
     <div className="h-100 flex items-center justify-center px-4 overflow-hidden">

@@ -7,30 +7,46 @@ const Home = () => {
   const [content, setContent] = useState("");
 
   const fetchPosts = async () => {
-    const res = await axios.get("https://minilinkedinn.onrender.com/api/posts");
-    setPosts(res.data.reverse());
+    try {
+      const res = await axios.get("https://minilinkedinn.onrender.com/api/posts");
+      setPosts(res.data.reverse());
+    } catch (err) {
+      console.error("Failed to fetch posts:", err);
+    }
   };
 
   useEffect(() => {
     fetchPosts();
   }, []);
+const handlePost = async () => {
+  const stored = JSON.parse(localStorage.getItem("user"));
+  const token = stored?.token;
+  
+  if (!token) {
+    alert("You must be logged in");
+    return;
+  }
 
-  const handlePost = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!content.trim()) return;
+  if (!content.trim()) return;
 
+  try {
     await axios.post(
-      "http://localhost:5000/api/posts",
+      "https://minilinkedinn.onrender.com/api/posts",
       { content },
       {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
     setContent("");
     fetchPosts();
-  };
+  } catch (err) {
+    console.error("Post failed:", err);
+    alert("Failed to post. Please log in again.");
+  }
+};
+
 
   return (
     <div className="max-w-3xl mx-auto mt-6 px-4">
