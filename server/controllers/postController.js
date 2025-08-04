@@ -1,6 +1,7 @@
 import Post from '../models/Post.js';
 import User from '../models/User.js';
 
+// Create Post
 export const createPost = async (req, res) => {
   try {
     const post = new Post({
@@ -10,32 +11,44 @@ export const createPost = async (req, res) => {
     await post.save();
     res.status(201).json(post);
   } catch (err) {
+    console.error(err);
     res.status(400).json({ error: 'Could not create post' });
   }
 };
 
+// Get All Posts with Author's Name and Bio
 export const getAllPosts = async (req, res) => {
-  const posts = await Post.find()
-    .populate('author', 'name bio') // include bio here as well, if needed
-    .sort({ createdAt: -1 });
-  res.json(posts);
+  try {
+    const posts = await Post.find()
+      .populate('author', 'name bio') // show name and bio
+      .sort({ createdAt: -1 });
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch posts' });
+  }
 };
 
+// Get User Profile and Posts
 export const getUserWithPosts = async (req, res) => {
   try {
-    // Explicitly select bio (and name) from user
-    const user = await User.findById(req.params.id).select('name bio');
+    const userId = req.params.id;
+
+    // Fetch user with name and bio
+    const user = await User.findById(userId).select('name bio');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Fetch posts with author populated to get name and bio if needed
-    const posts = await Post.find({ author: req.params.id })
+    // Fetch posts written by the user
+    const posts = await Post.find({ author: userId })
       .populate('author', 'name bio')
       .sort({ createdAt: -1 });
 
     res.json({ user, posts });
   } catch (err) {
-    res.status(400).json({ error: 'User not found' });
+    console.error(err);
+    res.status(500).json({ error: 'Server error fetching user data' });
   }
 };
