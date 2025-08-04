@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PostCard from "../components/PostCard";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -11,6 +12,7 @@ const Home = () => {
       const res = await axios.get("https://minilinkedinn.onrender.com/api/posts");
       setPosts(res.data.reverse());
     } catch (err) {
+      toast.error("Failed to fetch posts");
       console.error("Failed to fetch posts:", err);
     }
   };
@@ -24,7 +26,7 @@ const Home = () => {
     const token = stored?.token;
 
     if (!token) {
-      alert("You must be logged in");
+      toast.warn("You must be logged in");
       return;
     }
 
@@ -42,9 +44,10 @@ const Home = () => {
       );
       setContent("");
       fetchPosts();
+      toast.success("Post created successfully!");
     } catch (err) {
       console.error("Post failed:", err);
-      alert("Failed to post. Please log in again.");
+      toast.error("Failed to post. Please log in again.");
     }
   };
 
