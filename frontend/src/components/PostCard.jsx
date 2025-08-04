@@ -2,18 +2,34 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const PostCard = ({ post }) => {
+  if (!post.author) {
+    return (
+      <article className="bg-white shadow rounded-lg p-5 mb-5 border border-red-200">
+        <p className="text-red-600 font-semibold mb-2">Author info not available</p>
+        <p className="text-gray-900 whitespace-pre-wrap">{post.content}</p>
+        <time className="block mt-3 text-xs text-gray-400">
+          {new Date(post.createdAt).toLocaleString()}
+        </time>
+      </article>
+    );
+  }
+
   return (
-    <div className="bg-white shadow-md p-4 rounded-lg mb-4">
-      <div className="flex items-center justify-between">
-        <Link to={`/profile/${post.author._id}`} className="text-blue-600 font-semibold hover:underline">
+    <article className="bg-white shadow rounded-lg p-5 mb-5 border border-gray-200 hover:shadow-md transition-shadow">
+      <header className="flex items-center justify-between mb-3">
+        <Link
+          to={`/profile/${post.author._id}`}
+          className="text-blue-600 font-semibold hover:underline truncate max-w-xs"
+          title={post.author.name}
+        >
           {post.author.name}
         </Link>
-        <span className="text-xs text-gray-400">
+        <time className="text-xs text-gray-400">
           {new Date(post.createdAt).toLocaleString()}
-        </span>
-      </div>
-      <p className="mt-3 text-gray-800">{post.content}</p>
-    </div>
+        </time>
+      </header>
+      <p className="text-gray-900 whitespace-pre-wrap">{post.content}</p>
+    </article>
   );
 };
 

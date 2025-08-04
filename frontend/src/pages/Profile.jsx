@@ -40,32 +40,41 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    fetchUserData(); // Always fetch fresh profile data
+    fetchUserData();
   }, [id]);
 
-  if (loading) return <div className="text-center mt-6">Loading profile...</div>;
+  if (loading)
+    return <div className="text-center mt-8 text-lg text-gray-600">Loading profile...</div>;
 
-  if (error) return <div className="text-red-500 mt-6 text-center">{error}</div>;
+  if (error)
+    return <div className="text-center mt-8 text-red-500 font-semibold">{error}</div>;
 
-  if (!user) return <div className="text-gray-500 text-center mt-6">User not found.</div>;
+  if (!user)
+    return (
+      <div className="text-center mt-8 text-gray-500 font-medium">
+        User not found.
+      </div>
+    );
 
   return (
-    <div className="max-w-3xl mx-auto mt-6 px-4">
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-1">{user.name}</h1>
-        <p className="text-gray-600">
-          {user.bio?.trim() ? user.bio : "Bio not available."}
+    <main className="max-w-3xl mx-auto mt-8 px-4 sm:px-6">
+      <section className="bg-white shadow rounded-lg p-6 mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2 truncate">{user.name}</h1>
+        <p className="text-gray-600 whitespace-pre-wrap">
+          {user.bio?.trim() || "Bio not available."}
         </p>
-      </div>
+      </section>
 
-      <h2 className="text-xl font-semibold mb-4">Posts</h2>
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">Posts</h2>
 
-      {posts.length === 0 ? (
-        <p className="text-gray-500">No posts yet.</p>
-      ) : (
-        posts.map((post) => <PostCard key={post._id} post={post} />)
-      )}
-    </div>
+        {posts.length === 0 ? (
+          <p className="text-gray-500">No posts yet.</p>
+        ) : (
+          posts.map((post) => <PostCard key={post._id} post={post} />)
+        )}
+      </section>
+    </main>
   );
 };
 
